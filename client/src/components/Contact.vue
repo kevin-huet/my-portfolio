@@ -117,10 +117,12 @@ export default {
         this.alert.error = false
       }).catch(err => {
         console.log(err)
-        if (err.response && err.response.status === 429) {
-          this.alert.errorMessage = 'You have sent too many messages, please wait several minutes before trying again.'
-        } else {
-          this.alert.errorMessage = err.response.data.message
+        if (err.response) {
+          if (err.response.status === 429) {
+            this.alert.errorMessage = 'You have sent too many messages, please wait several minutes before trying again.'
+          } else {
+            this.alert.errorMessage = err.response.data.message
+          }
         }
         this.alert.error = true
         this.alert.success = false

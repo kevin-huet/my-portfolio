@@ -31,7 +31,7 @@ export default {
   name: 'Timeline',
   data: () => ({
     timeline: [
-      { date: 'Now', description: 'Designer / Developer in the company Bimeo, and student at ENI.<br> I mainly program in Php / Symfony during my professional activity' },
+      { date: 'Now', description: 'Designer / Developer in the company Bimeo, and student at ENI.\n I mainly program in Php / Symfony during my professional activity' },
       { date: '2020', description: 'Epitech 2nd year student' },
       { date: '2019', description: 'Fullstack developer at Bimeo (internship)' },
       { date: '2018 - 2019', description: 'Epitech 1st year student' },
