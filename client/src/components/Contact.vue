@@ -114,7 +114,7 @@ export default {
         this.alert.success = true
         this.alert.error = false
       }).catch(err => {
-        if (err.response.status === 429) {
+        if (err.response && err.response.status === 429) {
           this.alert.errorMessage = 'You have sent too many messages, please wait several minutes before trying again.'
         } else {
           this.alert.errorMessage = err.response.data.message
