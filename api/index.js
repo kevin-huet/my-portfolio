@@ -17,9 +17,9 @@ app.use(cors({
     origin: process.env.CORS
 }))
 
-app.use('/contact', limiter)
+app.use('/api/contact', limiter)
 
-app.use('/contact', contactRouter)
+app.use('/api/contact', contactRouter)
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
