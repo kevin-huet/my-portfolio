@@ -110,10 +110,13 @@ export default {
       }
       this.$http.post(process.env.VUE_APP_BASE_API_URL + '/contact', this.form).then(r => {
         console.log(r)
-        this.alert.successMessage = r.data.message
+        if (r.data) {
+          this.alert.successMessage = r.data.message
+        }
         this.alert.success = true
         this.alert.error = false
       }).catch(err => {
+        console.log(err)
         if (err.response && err.response.status === 429) {
           this.alert.errorMessage = 'You have sent too many messages, please wait several minutes before trying again.'
         } else {
