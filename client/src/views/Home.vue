@@ -20,10 +20,10 @@
 
 <script>
 import HomeSection from '@/components/HomeSection'
-import About from '@/views/About'
 import Skills from '@/components/Skills'
 import Timeline from '@/components/Timeline'
 import Contact from '@/components/Contact'
+import About from '@/components/About'
 
 export default {
   name: 'Home',
