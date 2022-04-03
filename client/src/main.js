@@ -7,7 +7,9 @@ import '@mdi/font/css/materialdesignicons.css'
 import Axios from 'axios'
 import vueScrollTo from 'vue-scrollto'
 import Vuelidate from 'vuelidate'
+import VueMeta from 'vue-meta'
 
+Vue.use(VueMeta)
 Vue.use(Vuelidate)
 Vue.prototype.$http = Axios
 Vue.use(vueScrollTo)

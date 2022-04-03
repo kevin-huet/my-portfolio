@@ -60,6 +60,11 @@
 import Footer from '@/components/Footer'
 export default {
   name: 'App',
+  metaInfo: {
+    // if no subcomponents specify a metaInfo.title, this title will be used
+    title: 'Kévin Huet'
+    // all titles will be injected into this template
+  },
   components: { Footer },
   data: () => ({
     drawer: false,
