@@ -1,4 +1,5 @@
 <template>
+  <div class="home-section" style="padding-top: 10vh; padding-bottom: 30vh" id="contact">
   <v-row>
     <v-col cols="12">
       <h2 class="white--text text-center">Contact</h2>
@@ -16,8 +17,6 @@
         >
           <v-text-field
             v-model="form.name"
-            @input="$v.form.name.$touch()"
-            @blur="$v.form.name.$touch()"
             label="Name"
             required filled
             :error-messages="nameErrors"
@@ -26,7 +25,6 @@
 
           <v-text-field
             v-model="form.email"
-            @input="$v.form.email.$touch()"
             @blur="$v.form.email.$touch()"
             label="E-mail"
             required filled
@@ -49,7 +47,6 @@
             filled
             :error-messages="messageErrors"
             v-model="form.message"
-            @input="$v.form.message.$touch()"
             @blur="$v.form.message.$touch()"
             label="Message"
             background-color="#001729"
@@ -65,14 +62,19 @@
       </v-card>
     </v-col>
   </v-row>
+    <div style="margin-top: 4em;">
+      <ControlBar @change-page="changePage" color-btn="#001d33" actualPage="contact"/>
+    </div>
+  </div>
 </template>
 
 <script>
 import Alert from '@/components/Alert'
 import { required, maxLength, email } from 'vuelidate/lib/validators'
+import ControlBar from '@/components/ControlBar'
 export default {
   name: 'Contact',
-  components: { Alert },
+  components: { ControlBar, Alert },
   data () {
     return {
       name: '',
@@ -103,6 +105,10 @@ export default {
     }
   },
   methods: {
+    changePage (args) {
+      (args.action === 'next') ? this.$emit('next-page', args.value)
+        : this.$emit('previous-page', args.value)
+    },
     sendForm () {
       this.$v.$touch()
       if (this.$v.$invalid) {

@@ -1,5 +1,7 @@
 <template>
   <v-row align="center">
+    <div style="margin-top: -2em; margin-bottom: 3em">
+    </div>
     <v-col cols="12">
       <h2 class="white--text text-center">About me</h2>
     </v-col>

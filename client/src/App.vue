@@ -9,11 +9,11 @@
       <v-toolbar-title style="font-family: Bang,serif; font-size: xx-large">&#60;Kevin Huet&#62;</v-toolbar-title>
       <v-spacer></v-spacer>
       <div class="hidden-sm-and-down">
-        <v-btn outlined color="#5C4FCC" style="margin-right: 1em" v-scroll-to="'#home'">Home</v-btn>
-        <v-btn outlined  color="#5C4FCC" style="margin-right: 1em" v-scroll-to="'#about'">About Me</v-btn>
-        <v-btn outlined  color="#5C4FCC" style="margin-right: 1em" v-scroll-to="'#skills'">Skills</v-btn>
-        <v-btn outlined  color="#5C4FCC" style="margin-right: 1em" v-scroll-to="'#timeline'">Timeline</v-btn>
-        <v-btn outlined  color="#5C4FCC" style="margin-right: 1em" v-scroll-to="'#contact'">Contact</v-btn>
+        <v-btn class="space-item active" @click="target = 'home'" outlined color="#5C4FCC">Home</v-btn>
+        <v-btn class="space-item" @click="target = 'about'" outlined  color="#5C4FCC">About Me</v-btn>
+        <v-btn class="space-item" @click="target = 'skills'" outlined  color="#5C4FCC">Skills</v-btn>
+        <v-btn class="space-item" @click="target = 'timeline'" outlined  color="#5C4FCC">Timeline</v-btn>
+        <v-btn class="space-item" @click="target = 'contact'" outlined  color="#5C4FCC">Contact</v-btn>
       </div>
     </v-app-bar>
     <v-navigation-drawer
@@ -30,26 +30,26 @@
           active-class="deep-purple--text text--accent-4"
         >
           <v-list-item>
-            <v-list-item-title v-scroll-to="'#home'">Home</v-list-item-title>
+            <v-list-item-title @click="target = 'home'">Home</v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-list-item-title v-scroll-to="'#about'">About Me</v-list-item-title>
+            <v-list-item-title @click="target = 'about'">About Me</v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-list-item-title v-scroll-to="'#skills'">Skills</v-list-item-title>
+            <v-list-item-title @click="target = 'skills'">Skills</v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-list-item-title v-scroll-to="'#timeline'">Timeline</v-list-item-title>
+            <v-list-item-title @click="target = 'timeline'">Timeline</v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-list-item-title v-scroll-to="'#contact'">Contact</v-list-item-title>
+            <v-list-item-title @click="target = 'contact'">Contact</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
 
     <v-main>
-      <router-view/>
+      <Home @change-page="changePage" :target="target"/>
     </v-main>
     <Footer></Footer>
   </v-app>
@@ -58,6 +58,9 @@
 <script>
 
 import Footer from '@/components/Footer'
+import Home from '@/views/Home'
+import { pageName } from '@/utils/data'
+
 export default {
   name: 'App',
   metaInfo: {
@@ -65,14 +68,21 @@ export default {
     title: 'Kévin Huet'
     // all titles will be injected into this template
   },
-  components: { Footer },
+  components: { Home, Footer },
   data: () => ({
+    target: pageName.HOME,
     drawer: false,
     group: null
   }),
   watch: {
     group () {
       this.drawer = false
+    }
+  },
+  methods: {
+    changePage (value) {
+      this.target = value
+      window.scrollTo(0, 0)
     }
   }
 }
@@ -82,5 +92,8 @@ export default {
   font-family: "Bang";
   src: local("Bang"),
   url('assets/fonts/FreshLychee.otf')
+}
+.space-item {
+  margin-right: 1em;
 }
 </style>
