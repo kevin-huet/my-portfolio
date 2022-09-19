@@ -5,7 +5,7 @@
         dark
         color="#001d33"
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-md-and-up"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon aria-label="sidebar button" @click.stop="drawer = !drawer" class="hidden-md-and-up"></v-app-bar-nav-icon>
       <v-toolbar-title style="font-family: Bang,serif; font-size: xx-large">&#60;Kevin Huet&#62;</v-toolbar-title>
       <v-spacer></v-spacer>
       <div class="hidden-sm-and-down">
