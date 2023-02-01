@@ -11,5 +11,5 @@ export default defineConfig({
 	    viteCompression(),
 		vue(),
 		vuetify({ autoImport: true }),
-	]
+	],
 })

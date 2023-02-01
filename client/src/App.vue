@@ -12,6 +12,7 @@
         <v-btn class="space-item active" @click="changePage('Home')" variant="outlined" color="#5C4FCC">Home</v-btn>
         <v-btn class="space-item" @click="changePage('About')" variant="outlined" color="#5C4FCC">About Me</v-btn>
         <v-btn class="space-item" @click="changePage('Skills')" variant="outlined" color="#5C4FCC">Skills</v-btn>
+        <v-btn class="space-item" @click="changePage('Projects')" variant="outlined" color="#5C4FCC">Projects</v-btn>
         <v-btn class="space-item" @click="changePage('Timeline')" variant="outlined" color="#5C4FCC">Timeline</v-btn>
         <v-btn class="space-item" @click="changePage('Contact')" variant="outlined" color="#5C4FCC">Contact</v-btn>
       </div>
@@ -42,6 +43,9 @@
             <v-list-item-title @click="changePage('skills')">Skills</v-list-item-title>
           </v-list-item>
           <v-list-item>
+            <v-list-item-title @click="changePage('projects')">Projects</v-list-item-title>
+          </v-list-item>
+          <v-list-item>
             <v-list-item-title @click="changePage('timeline')">Timeline</v-list-item-title>
           </v-list-item>
           <v-list-item>
@@ -68,6 +72,7 @@ import Timeline from "./components/Timeline.vue";
 import Skills from "./components/Skills.vue";
 import About from "./components/About.vue";
 import Home from "./components/HomeSection.vue";
+import Projects from "./components/Projects.vue";
 import {FadeInOut} from "vue3-transitions";
 
 export default {
@@ -77,7 +82,7 @@ export default {
     title: 'Kévin Huet'
     // all titles will be injected into this template
   },
-  components: {FadeInOut, Footer, Contact, Timeline, Skills, About, Home },
+  components: {FadeInOut, Footer, Contact, Timeline, Skills, About, Home, Projects },
   data () {
     return {
       dynamicComponent: 'home',

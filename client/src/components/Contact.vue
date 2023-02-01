@@ -102,14 +102,12 @@ export default {
     },
     sendForm () {
       axios.post(import.meta.env.VITE_APP_BASE_API_URL + '/contact', this.form).then(r => {
-        console.log(r)
         if (r.data) {
           this.alert.successMessage = r.data?.message
         }
         this.alert.success = true
         this.alert.error = false
       }).catch(err => {
-        console.log(err)
         if (err.response) {
           if (err.response.status === 429) {
             this.alert.errorMessage = 'You have sent too many messages, please wait several minutes before trying again.'
