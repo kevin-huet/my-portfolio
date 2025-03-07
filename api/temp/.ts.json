@@ -1,0 +1,1 @@
+{"data":{"_id":3000,"properties":{},"primaryKeys":[],"filters":{},"hooks":{},"indexes":[],"uniques":[],"className":"","abstract":true,"internal":true,"constructorParams":[],"toJsonParams":[],"useCache":true,"path":"./src/entities/category.entity.ts"},"origin":"./src/entities/category.entity.ts","hash":"e667abc956fa14add2745d94eec15110","version":"6.4.6"}
