@@ -13,20 +13,27 @@
     "@vuelidate/core": "^2.0.0-alpha.44",
     "@vuelidate/validators": "^2.0.0-alpha.31",
     "axios": "^0.27.2",
+    "jwt-decode": "^4.0.0",
     "lighthouse": "^9.6.7",
+    "pinia": "^3.0.1",
     "roboto-fontface": "*",
     "vite-plugin-compression": "^0.5.1",
-    "vue": "^3.2.37",
+    "vue": "^3.5.13",
     "vue-meta": "^2.4.0",
+    "vue-router": "^4.5.0",
     "vue3-transitions": "^1.0.0",
     "vuetify": "npm:@vuetify/nightly@next",
     "webfontloader": "^1.0.0"
   },
   "devDependencies": {
+    "@types/webfontloader": "^1.6.38",
     "@vitejs/plugin-vue": "^3.1.0",
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "^5.7.3",
     "vite": "^3.1.0",
     "vite-plugin-vuetify": "^1.0.0-alpha.12",
-    "vue-cli-plugin-vuetify": "~2.5.8"
+    "vue-cli-plugin-vuetify": "~2.5.8",
+    "vue-tsc": "^2.2.4"
   },
   "type": "module"
 }

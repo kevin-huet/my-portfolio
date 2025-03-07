@@ -11,7 +11,7 @@
             <v-btn dark v-if="isAuthenticated">Create</v-btn>
           </div>
         </v-col>
-        <v-col v-for="project in projects" :key="project.name"
+        <v-col v-for="project in projects" :key="project.id"
                cols="12" sm="12" md="6" lg="6" class="mt-6">
           <v-card dark color="#001d33"
                   elevation="1"
@@ -22,7 +22,7 @@
             <v-divider dark/>
             <v-card-text class="text-center overflow-y-auto" style="height: 110px">
               <p style="font-size: 15px; padding-bottom: 1em">
-                {{ project.desc }}
+                {{ project.description }}
               </p>
             </v-card-text>
             <v-card-text class="text-center  overflow-y-auto">
@@ -43,6 +43,7 @@
               <v-btn
                   icon="mdi-delete"
                   size="small"
+                  @click="deleteProject(project.id)"
               ></v-btn>
             </v-card-actions>
           </v-card>
@@ -53,26 +54,31 @@
 </template>
 
 <script lang="ts">
-import Api from '@/services/api';
+import {projectService} from "@/services/project.service";
+import {onMounted, ref} from "vue";
+import {ProjectDto} from "@/dto/project.dto";
+
 export default {
   name: 'Projects',
   props: ['isAuthenticated'],
   setup(props) {
-    const isAuthenticated = props.isAuthenticated;
-    console.log(isAuthenticated);
+    const projects = ref<ProjectDto[]>([]);
+    const deleteProject = (uuid?: string) => {
+      if (uuid) {
+        projectService.delete(uuid).then(() => {
+          projects.value = projects.value.filter((item) => item.id !== uuid);
+        }).catch();
+      }
+    };
+
+    onMounted(() => {
+      projectService.getAll().then((r: any) => {
+        console.log(r.data);
+        projects.value = r.data ? r.data : [];
+      }).catch();
+    });
+    return { deleteProject, projects };
   },
-  data() {
-    return {
-      projects: [] as { name: string, technologies: any[], desc: string }[]
-    }
-  },
-  beforeMount() {
-    Api.getProjects().then((r: any) => {
-      console.log(r);
-      this.projects = r.data ? r.data : [];
-    }).catch();
-  },
-  methods: {}
 }
 </script>
 

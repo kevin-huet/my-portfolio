@@ -1,135 +1,149 @@
 <template>
   <v-app>
-    <v-app-bar
-        app
-        dark
-        color="#001d33"
-    >
-      <v-app-bar-nav-icon aria-label="sidebar button" @click.stop="drawer = !drawer" class="hidden-md-and-up"></v-app-bar-nav-icon>
-      <v-toolbar-title style="font-family: Bang,serif; font-size: xx-large">&#60;Kevin Huet&#62;</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <div class="hidden-sm-and-down">
-        <v-btn class="space-item active" @click="changePage('Home')" variant="outlined" color="#5C4FCC">Home</v-btn>
-        <v-btn class="space-item" @click="changePage('About')" variant="outlined" color="#5C4FCC">About Me</v-btn>
-        <v-btn class="space-item" @click="changePage('Skills')" variant="outlined" color="#5C4FCC">Skills</v-btn>
-        <v-btn class="space-item" @click="changePage('Projects')" variant="outlined" color="#5C4FCC">Projects</v-btn>
-        <v-btn class="space-item" @click="changePage('Timeline')" variant="outlined" color="#5C4FCC">Timeline</v-btn>
-        <v-btn class="space-item" @click="changePage('Contact')" variant="outlined" color="#5C4FCC">Contact</v-btn>
-      </div>
-    </v-app-bar>
-    <v-navigation-drawer
-        dark
-        color="#001d33"
-        v-model="drawer"
-        absolute
-        bottom
-        temporary="true"
-    >
-      <v-list
-          nav
-          dense
-      >
-        <v-list-item-group
-            v-model="group"
-            active-class="deep-purple--text text--accent-4"
-        >
-          <v-list-item>
-            <v-list-item-title @click="changePage('home')">Home</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title @click="changePage('about')">About Me</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title @click="changePage('skills')">Skills</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title @click="changePage('projects')">Projects</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title @click="changePage('timeline')">Timeline</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title @click="changePage('contact')">Contact</v-list-item-title>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
+    <app-bar @change-page-event="changePage" />
 
     <v-main style="background-color: #001220">
       <FadeInOut :duration="250" mode="out-in">
-        <component @previous-page="changePage" @next-page="changePage" :is="this.dynamicComponent"></component>
+        <component
+            :isAuthenticated="authStore.isAuthenticated"
+            @previous-page="changePage"
+            @next-page="changePage"
+            :is="dynamicComponent"
+        ></component>
       </FadeInOut>
     </v-main>
-    <Footer @changePage="changePage"></Footer>
+
+    <Footer @changePage="changePage" />
+
+    <v-dialog v-model="loginModal" max-width="500">
+      <v-card>
+        <v-card-title class="headline">Connexion</v-card-title>
+        <v-card-text>
+          <v-form @submit.prevent="login">
+            <v-text-field
+                v-model="username"
+                label="Nom d'utilisateur"
+                outlined
+                required
+            ></v-text-field>
+            <v-text-field
+                v-model="password"
+                label="Mot de passe"
+                type="password"
+                outlined
+                required
+            ></v-text-field>
+            <v-btn type="submit" color="primary">Se connecter</v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
-<script>
-import { pageName } from './utils/data'
-import Footer from "./components/Footer.vue";
-import Contact from "./components/Contact.vue";
-import Timeline from "./components/Timeline.vue";
-import Skills from "./components/Skills.vue";
-import About from "./components/About.vue";
-import Home from "./components/HomeSection.vue";
-import Projects from "./components/Projects.vue";
-import {FadeInOut} from "vue3-transitions";
-
+<script lang="ts">
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import Footer from "@/components/ui/footer.vue";
+import Contact from "@/components/section/contact.vue";
+import Timeline from "@/components/section/timeline.vue";
+import Skills from "@/components/section/skills.vue";
+import About from "@/components/section/about.vue";
+import Home from "@/components/section/home.vue";
+import { FadeInOut } from "vue3-transitions";
+import AppBar from "@/components/ui/app-bar.vue";
+import {useAuthStore} from "@/stores/auth";
+import Projects from "@/components/section/projects.vue";
 export default {
-  name: 'App',
-  metaInfo: {
-    // if no subcomponents specify a metaInfo.title, this title will be used
-    title: 'Kévin Huet'
-    // all titles will be injected into this template
+  name: "App",
+  components: {
+    AppBar,
+    FadeInOut,
+    Footer,
+    Contact,
+    Timeline,
+    Skills,
+    About,
+    Home,
+    Projects,
   },
-  components: {FadeInOut, Footer, Contact, Timeline, Skills, About, Home, Projects },
-  data () {
+  setup() {
+    // states
+    const dynamicComponent = ref("home");
+    const loginModal = ref(false);
+    const username = ref("");
+    const password = ref("");
+    const authStore = useAuthStore();
+
+    // methods
+    const changePage = (value: any) => {
+      dynamicComponent.value = value;
+      window.scrollTo(0, 0);
+    };
+
+    const login = () => {
+      console.log("Tentative de connexion avec :", username.value, password.value);
+      authStore.login(username.value, password.value).then(() => {
+        loginModal.value = false;
+      }).catch(() => {});
+    };
+
+    const handleKeyDown = (event: any) => {
+      if (event.ctrlKey && event.shiftKey && event.key === "L") {
+        loginModal.value = true;
+      }
+    };
+
+    // Lifecycle hooks
+    onMounted(async () => {
+      await authStore.checkAuth();
+      console.log(authStore.isAuthenticated);
+      window.addEventListener("keydown", handleKeyDown);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("keydown", handleKeyDown);
+    });
+
     return {
-      dynamicComponent: 'home',
-      target: pageName.HOME,
-      drawer: false,
-      group: null
-    }
+      dynamicComponent,
+      loginModal,
+      username,
+      password,
+      changePage,
+      login,
+      authStore,
+    };
   },
-  watch: {
-    group () {
-      this.drawer = false
-    }
-  },
-  methods: {
-    changePage (value) {
-      this.dynamicComponent = value;
-      this.drawer = false;
-      console.log(`${value} to => ${this.dynamicComponent}`)
-      window.scrollTo(0, 0)
-    }
-  }
-}
+};
 </script>
+
 <style lang="css">
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 body {
-  background-color: #001220!important;
-  height: 100%!important;
+  background-color: #001220 !important;
+  height: 100% !important;
 }
+
 @font-face {
   font-family: "Bang";
-  src: local("Bang"),
-  url('/assets/fonts/FreshLychee.otf')
+  src: local("Bang"), url("/assets/fonts/FreshLychee.otf");
 }
+
 .space-item {
   margin-right: 1em;
 }
 
 .home-section {
-  background-image: url('/assets/svg/svgBackground.svg');
-  background-size: cover
+  background-image: url("/assets/svg/svgBackground.svg");
+  background-size: cover;
 }
+
 .stripe-section {
-  background-image: url('/assets/svg/svgBackground2.svg');
-  background-size: cover
+  background-image: url("/assets/svg/svgBackground2.svg");
+  background-size: cover;
 }
 </style>

@@ -28,7 +28,7 @@
               <v-card-title class="text-h5" dark>
                 {{ data.startedAt }} - {{ data.endedAt }}
               </v-card-title>
-              <v-card-text v-html="data.desc">
+              <v-card-text v-html="data.description">
               </v-card-text>
               <v-card-actions v-if="isAuthenticated">
                 <v-spacer></v-spacer>
@@ -42,6 +42,7 @@
                 <v-btn
                     icon="mdi-delete"
                     size="small"
+                    @click="deleteTimeline(data.id)"
                 ></v-btn>
               </v-card-actions>
             </v-card>
@@ -56,10 +57,10 @@
 
 <script lang="ts">
 
-import TimelineForm from "@/components/forms/TimelineForm.vue";
+import TimelineForm from "@/components/forms/timeline-form.vue";
 import {onBeforeMount, onMounted, Ref, ref} from "vue";
-import Api from '@/services/api';
-import {TimelineDto} from "@/dto/timeline-dto";
+import {TimelineDto} from "@/dto/timeline.dto";
+import {timelineService} from "@/services/timeline.service";
 export default {
   name: 'Timeline',
   components: {TimelineForm},
@@ -69,21 +70,34 @@ export default {
     const timelineModal = ref(false);
     const timeline: Ref<TimelineDto[]> = ref([]);
     const modalAction = ref('create');
-    console.log(isAuthenticated);
 
     const modalToggle = async (action: string) => {
       modalAction.value = action;
       timelineModal.value = !timelineModal.value;
     }
 
+    const deleteTimeline = async (id?: string) => {
+      if (id) {
+        timelineService.delete(id).then(() => {
+          timeline.value = timeline.value.filter(item => item.id !== id);
+        }).catch();
+      }
+    }
+
     onMounted(async () => {
-      Api.getTimeline().then((r : any) => {
+      timelineService.getAll().then((r : any) => {
         timeline.value = r.data;
-        console.log(timeline);
+        console.log(r.data);
       });
     });
 
-    return {isAuthenticated, timeline, timelineModal, modalToggle};
+    return {
+      isAuthenticated,
+      timeline,
+      timelineModal,
+      modalToggle,
+      deleteTimeline
+    };
   },
 }
 </script>

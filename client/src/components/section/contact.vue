@@ -12,46 +12,7 @@
         <Alert :alert="(alert.error) || (alert.success)"
                :text="(alert.error) ? alert.errorMessage : alert.successMessage"
                :color="(alert.error) ? 'red' : 'green'"></Alert>
-        <v-form
-            class="mt-4"
-          @submit.prevent="sendForm"
-        >
-          <v-text-field
-            v-model="form.name"
-            label="Name"
-            required filled
-            background-color="#001729"
-          ></v-text-field>
-
-          <v-text-field
-            v-model="form.email"
-            label="E-mail"
-            required filled
-            background-color="#001729"
-          ></v-text-field>
-
-          <v-select
-            dark
-            v-model="form.reason"
-            :items="items"
-            label="Reason"
-            required filled
-            background-color="#001729"
-          ></v-select>
-          <v-textarea
-            filled
-            v-model="form.message"
-            label="Message"
-            background-color="#001729"
-          />
-          <v-btn
-            color="success"
-            class="mr-4"
-            @click="sendForm"
-          >
-            Send
-          </v-btn>
-        </v-form>
+        <ContactForm @alert="alertEvent"/>
       </v-card>
     </v-col>
   </v-row>
@@ -61,64 +22,60 @@
 </template>
 
 <script lang="ts">
-import Alert from "./Alert.vue";
+import Alert from "@/components/ui/alert.vue";
 import axios from 'axios';
 import {email, helpers, maxLength, required} from "@vuelidate/validators";
+import ContactForm from "@/components/forms/contact-form.vue";
+import {reactive} from "vue";
+import {da} from "vuetify/locale";
 export default {
   name: 'Contact',
-  components: { Alert },
-  data () {
-    return {
-      alert: {
-        success: false,
-        error: false,
-        successMessage: '',
-        errorMessage: ''
-      },
+  components: {ContactForm, Alert },
+  setup() {
+    const alert = reactive({
+      success: false,
+      error: false,
+      successMessage: '',
+      errorMessage: ''
+    });
+
+    const form = reactive({
+      name: '',
+      email: '',
+      message: '',
+      reason: ''
+    });
+    const items = ['Job', 'Other'];
+    const validations = reactive({
       form: {
-        name: '',
-        email: '',
-        message: '',
-        reason: ''
-      },
-      items: [
-        'Job',
-        'Other'
-      ]
+        name: { required },
+        email: { required, email },
+        reason: { required },
+        message: { required, maxLength: helpers.withMessage('Your message cannot be more than 10000 characters', maxLength(1000)) }
+      }
+    });
+
+    const alertEvent = (data: any) => {
+      alert.errorMessage = data.errorMessage;
+      alert.error = data.error;
+      alert.successMessage = data.successMessage;
+      alert.success = data.success;
     }
-  },
-  validations: {
-    form: {
-      name: { required },
-      email: {  required, email },
-      reason: { required },
-      message: { required, maxLength: helpers.withMessage('Your message cannot be more than 10000 characters', maxLength(1000)) }
-    }
+
+    return {
+      alert,
+      form,
+      items,
+      validations,
+      alertEvent
+    };
   },
   methods: {
     changePage (args: any) {
       (args.action === 'next') ? this.$emit('next-page', args.value)
         : this.$emit('previous-page', args.value)
     },
-    sendForm () {
-      axios.post(import.meta?.env.VITE_APP_BASE_API_URL + '/contact', this.form).then(r => {
-        if (r.data) {
-          this.alert.successMessage = r.data?.message
-        }
-        this.alert.success = true
-        this.alert.error = false
-      }).catch(err => {
-        if (err.response) {
-          if (err.response.status === 429) {
-            this.alert.errorMessage = 'You have sent too many messages, please wait several minutes before trying again.'
-          } else {
-            this.alert.errorMessage = err.response.data?.message
-          }
-        }
-        this.alert.error = true
-        this.alert.success = false
-      })
-    }
+
   },
   computed: {
   }

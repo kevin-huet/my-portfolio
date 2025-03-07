@@ -1,10 +1,10 @@
 import { createApp } from 'vue'
 import App from './app.vue'
-import vuetify from './plugins/vuetify'
-import { loadFonts } from './plugins/webfontloader'
+import vuetify from '@/plugins/vuetify'
+import { loadFonts } from '@/plugins/webfontloader'
 import Vue3Transitions from 'vue3-transitions'
-import {createPinia} from "pinia";
-const pinia = createPinia()
+import {createPinia, Pinia} from "pinia";
+const pinia: Pinia = createPinia()
 
 
 loadFonts()
