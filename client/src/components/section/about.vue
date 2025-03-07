@@ -1,5 +1,13 @@
 <template>
   <div class="stripe-section" style="padding-top: 10vh; padding-bottom: 10vh" id="about">
+    <v-dialog v-model="timelineModal" max-width="500">
+      <v-card>
+        <v-card-title class="headline">Timeline</v-card-title>
+        <v-card-text>
+          <TimelineForm categories="categories"/>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-row align="center">
       <v-col cols="12">
         <h2 class="white--text text-center">About me</h2>
@@ -45,8 +53,11 @@
 </template>
 <script lang="ts">
 
+import TimelineForm from "@/components/forms/timeline-form.vue";
+
 export default {
   name: 'About',
+  components: {TimelineForm},
   methods: {
     changePage (args: any) {
       (args.action === 'next') ? this.$emit('next-page', args?.value)

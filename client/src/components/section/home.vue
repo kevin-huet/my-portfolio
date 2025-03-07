@@ -41,7 +41,7 @@
 
 <script lang="ts">
 
-import BlobProfileImage from "./BlobProfileImage.vue";
+import BlobProfileImage from "../blob-profile-image.vue";
 
 export default {
   name: 'Home',
