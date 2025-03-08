@@ -1,5 +1,11 @@
-client/node_modules/
+apps/portfolio/node_modules/
 api/node_modules/
 api/.env
-client/.env
+apps/portfolio/.env
 .idea/
+
+.nx/installation
+.nx/cache
+.nx/workspace-data
+vite.config.*.timestamp*
+vitest.config.*.timestamp*

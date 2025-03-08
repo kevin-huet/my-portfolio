@@ -1,0 +1,49 @@
+{
+  "installation": {
+    "version": "20.5.0",
+    "plugins": {
+      "@nx/eslint": "20.5.0",
+      "@nx/jest": "20.5.0",
+      "@nx/vite": "20.5.0",
+      "@nx/nuxt": "20.5.0"
+    }
+  },
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "test": {
+      "cache": true
+    }
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "buildTargetName": "next:build",
+        "devTargetName": "dev",
+        "startTargetName": "start",
+        "targetName": "test"
+      }
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    },
+    {
+      "plugin": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "testTargetName": "test",
+        "serveTargetName": "serve",
+        "devTargetName": "dev",
+        "previewTargetName": "preview",
+        "serveStaticTargetName": "serve-static",
+        "typecheckTargetName": "typecheck",
+        "buildDepsTargetName": "build-deps",
+        "watchDepsTargetName": "watch-deps"
+      }
+    }
+  ],
+  "nxCloudId": "67cb85f4de0ee137922bff90"
+}
